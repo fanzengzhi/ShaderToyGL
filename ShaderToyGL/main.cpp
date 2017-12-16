@@ -44,9 +44,13 @@ int main()
 														// ------------------------------------------------------------------
 	float vertices[] = {
 		// positions         // colors
-		0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
-		0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
+		-1.0f, -1.0f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
+		-1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
+		1.0f, -1.0f, 0.0f,  0.0f, 0.0f, 1.0f,   // top 
+
+		1.0f, -1.0f, 0.0f,  1.0f, 0.0f, 0.0f,  // bottom right
+		-1.0f, 1.0f, 0.0f,  0.0f, 1.0f, 0.0f,  // bottom left
+		1.0f, 1.0f, 0.0f,  0.0f, 0.0f, 1.0f   // top 
 	};
 
 	unsigned int VBO, VAO;
@@ -86,7 +90,7 @@ int main()
 		// render the triangle
 		ourShader.use();
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
