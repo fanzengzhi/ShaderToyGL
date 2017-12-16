@@ -1,8 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-
+#include <time.h>
 #include "Shader.h"
+
+using namespace std;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -69,13 +71,8 @@ int main()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	// You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	// VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-	// glBindVertexArray(0);
-
-
 	// render loop
-	// -----------
+	int curTime = time(NULL);
 	while (!glfwWindowShouldClose(window))
 	{
 		// input
@@ -89,6 +86,10 @@ int main()
 
 		// render the triangle
 		ourShader.use();
+		curTime = time(NULL);
+		curTime = curTime % 100;
+		ourShader.setFloat("time", curTime);
+		cout << "Time:" << curTime << endl;
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
