@@ -94,6 +94,21 @@ public:
 	{
 		glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
 	}
+	// ------------------------------------------------------------------------
+	void setVec2(const std::string &name, float* value)
+	{
+		glUniform2f(glGetUniformLocation(ID, name.c_str()), value[0], value[1]);
+	}
+	// ------------------------------------------------------------------------
+	void setVec3(const std::string &name, float* value)
+	{
+		glUniform3f(glGetUniformLocation(ID, name.c_str()), value[0], value[1], value[2]);
+	}
+	// ------------------------------------------------------------------------
+	void setVec4(const std::string &name, float* value)
+	{
+		glUniform4f(glGetUniformLocation(ID, name.c_str()), value[0], value[1], value[2], value[3]);
+	}
 
 private:
 	// utility function for checking shader compilation/linking errors.

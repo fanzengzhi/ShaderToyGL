@@ -141,9 +141,13 @@ int main()
 	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
 	// or set it via the texture class
 	ourShader.setInt("texture2", 1);
+	
+	// Set Uniforms
+	float resolution[3] = { 800.0f, 600.0f, 0.0f};
+	ourShader.setVec3("iResolution", resolution);
 
 	// render loop
-	int curTime = time(NULL);
+	float curTime = clock();
 	while (!glfwWindowShouldClose(window))
 	{
 		// input
@@ -157,9 +161,9 @@ int main()
 
 		// render the triangle
 		ourShader.use();
-		curTime = time(NULL);
-		curTime = curTime % 100;
-		ourShader.setFloat("time", curTime);
+		curTime = clock();
+		curTime = curTime / 1000.0f;
+		ourShader.setFloat("iTime", curTime);
 		//cout << "Time:" << curTime << endl;
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
