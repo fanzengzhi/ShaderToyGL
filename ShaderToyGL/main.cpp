@@ -14,6 +14,17 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
+float cursorX = 0;
+float cursorY = 0;
+
+void cursor_position_callback(GLFWwindow* window, double x, double y)
+{
+	//printf("Mouse position move to [%d:%d]\n", int(x), int(y));
+	cursorX = (float)x;
+	cursorY = (float)y;
+	return;
+}
+
 int main()
 {
 	glfwInit();
@@ -30,6 +41,9 @@ int main()
 	}
 	glfwMakeContextCurrent(window);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+
+	glfwSetCursorPosCallback(window, cursor_position_callback);
 
 	// glad: load all OpenGL function pointers
 	// ---------------------------------------
@@ -143,11 +157,12 @@ int main()
 	ourShader.setInt("texture2", 1);
 	
 	// Set Uniforms
-	float resolution[3] = { 800.0f, 600.0f, 0.0f};
+	float resolution[3] = { SCR_WIDTH, SCR_HEIGHT, 0.0f};
 	ourShader.setVec3("iResolution", resolution);
 
+
 	// render loop
-	float curTime = clock();
+	float curTime = (float)clock();
 	while (!glfwWindowShouldClose(window))
 	{
 		// input
@@ -161,10 +176,19 @@ int main()
 
 		// render the triangle
 		ourShader.use();
-		curTime = clock();
+
+		// uniforms
+		auto preTime = curTime;
+		curTime = (float)clock();
 		curTime = curTime / 1000.0f;
 		ourShader.setFloat("iTime", curTime);
 		//cout << "Time:" << curTime << endl;
+		auto deltaTime = curTime - preTime;
+		ourShader.setFloat("iTimeDelta", deltaTime);
+
+		float mouse[4] = { cursorX, cursorY, 0, 0 };
+		ourShader.setVec4("iMouse", mouse);
+
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

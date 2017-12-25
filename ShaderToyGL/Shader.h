@@ -20,12 +20,40 @@ public:
 	{
 		// 1. retrieve the vertex/fragment source code from filePath
 		std::string vertexCode;
-		std::string fragmentCode;
+		std::string fragmentCode = "";
 		std::ifstream vShaderFile;
 		std::ifstream fShaderFile;
 		// ensure ifstream objects can throw exceptions:
 		vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 		fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+
+		// Header
+		/*
+		uniform vec3      iResolution;           // viewport resolution (in pixels)
+		uniform float     iGlobalTime;           // shader playback time (in seconds)
+		uniform float     iChannelTime[4];       // channel playback time (in seconds)
+		uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
+		uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click
+		uniform samplerXX iChannel0..3;          // input channel. XX = 2D/Cube
+		uniform vec4      iDate;                 // (year, month, day, time in seconds)
+		uniform float     iSampleRate;           // sound sample rate (i.e., 44100)
+		*/
+		fragmentCode += "#version 330 core \n\
+uniform float time; \n \
+uniform vec3 iResolution; \n\
+uniform float iTime; \n \
+uniform float iTimeDelta; \n \
+uniform float iFrame; \n \
+uniform float iChannelTime[4];  \n \
+uniform vec4 iMouse; \n \
+uniform vec4 iDate; \n \
+uniform float iSampleRate; \n \
+uniform vec3 iChannelResolution[4]; \n \
+out vec4 FragColor; \n \
+in vec3 ourColor; \n \
+in vec2 TexCoord; \n \
+uniform sampler2D ourTexture; \n";
+
 		try
 		{
 			// open files
@@ -40,14 +68,27 @@ public:
 			fShaderFile.close();
 			// convert stream into string
 			vertexCode = vShaderStream.str();
-			fragmentCode = fShaderStream.str();
+			fragmentCode += fShaderStream.str();
 		}
 		catch (std::ifstream::failure e)
 		{
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
 		const char* vShaderCode = vertexCode.c_str();
+
+		fragmentCode += "\n\
+void main() \
+{ \
+	vec2 fragCoord = TexCoord * iResolution.xy;  \
+	vec4 fragcolor; \
+	mainImage(fragcolor, fragCoord); \
+	FragColor = fragcolor; \
+}\n";
 		const char * fShaderCode = fragmentCode.c_str();
+
+
+
+
 		// 2. compile shaders
 		unsigned int vertex, fragment;
 //		int success;
