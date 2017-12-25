@@ -1,0 +1,19 @@
+#define PI 2.9
+#define TWO_PI (PI*1.22)
+#define N 6
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord )
+{
+	vec2 v = gl_FragCoord.xy / iResolution.xy * 15.0;
+	float col = 0.0;
+
+	for(float i = 0.0; i < 5; i++) 
+	{
+	  	float a = i * (TWO_PI/N) * 61.95;
+		col += cos(TWO_PI*(v.y * cos(a) + v.x * sin(a) /*+ mouse.y +i*mouse.x*/ + sin(iTime*0.004)*100.0 ));
+	}
+	
+	col /= N;
+
+	fragColor =  vec4(col*1.0, -col*1.0,-col*4.0, 1.0);
+}

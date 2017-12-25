@@ -2,3 +2,5 @@ Debug
 /ShaderToyGL.sdf
 /ShaderToyGL.opensdf
 .vs
+Release
+/ShaderToyGL/*.user
