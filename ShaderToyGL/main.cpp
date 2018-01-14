@@ -1,11 +1,15 @@
+#pragma warning(disable:4996)
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <time.h>
 #include "stb_image.h"
 #include "Shader.h"
-
+#include "PathOperation.h"
 using namespace std;
+
+HWND hWnd;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
@@ -24,6 +28,7 @@ void cursor_position_callback(GLFWwindow* window, double x, double y)
 	cursorY = (float)y;
 	return;
 }
+
 
 int main()
 {
@@ -55,11 +60,16 @@ int main()
 
 	// build and compile our shader program
 	// ------------------------------------
-	Shader ourShader("Shaders/vertex.vs", "Shaders/pixel.ps"); // you can name your shader files however you like
+	string initPath = getAppPath();
+	vector<string> fileExtensions;
+	fileExtensions.push_back("ps");
+	auto filePath = getOpenFilePath(hWnd, ".\\", fileExtensions);
+	if (filePath == "")
+		return -1;
+	Shader ourShader(filePath.c_str()); 
 
-														// set up vertex data (and buffer(s)) and configure vertex attributes
-														// ------------------------------------------------------------------
-
+	// set up vertex data (and buffer(s)) and configure vertex attributes
+	// ------------------------------------------------------------------
 	float vertices[] = {
 		// positions          // colors           // texture coords
 		1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right
@@ -113,7 +123,9 @@ int main()
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 											// The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-	unsigned char *data = stbi_load("test.jpg", &width, &height, &nrChannels, 0);
+
+	string imagePath = initPath + "\\test.jpg";
+	unsigned char *data = stbi_load(imagePath.c_str(), &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
@@ -135,7 +147,7 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// load image, create texture and generate mipmaps
-	data = stbi_load("test.jpg", &width, &height, &nrChannels, 0);
+	data = stbi_load(imagePath.c_str(), &width, &height, &nrChannels, 0);
 	if (data)
 	{
 		// note that the awesomeface.png has transparency and thus an alpha channel, so make sure to tell OpenGL the data type is of GL_RGBA
@@ -154,7 +166,7 @@ int main()
 					 // either set it manually like so:
 	glUniform1i(glGetUniformLocation(ourShader.ID, "texture1"), 0);
 	// or set it via the texture class
-	ourShader.setInt("texture2", 1);
+	//ourShader.setInt("texture2", 1);
 	
 	// Set Uniforms
 	float resolution[3] = { SCR_WIDTH, SCR_HEIGHT, 0.0f};

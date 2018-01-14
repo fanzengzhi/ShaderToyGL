@@ -16,7 +16,7 @@ public:
 	unsigned int ID;
 	// constructor generates the shader on the fly
 	// ------------------------------------------------------------------------
-	Shader(const char* vertexPath, const char* fragmentPath)
+	Shader(const char* fragmentPath)
 	{
 		// 1. retrieve the vertex/fragment source code from filePath
 		std::string vertexCode;
@@ -57,23 +57,40 @@ uniform sampler2D ourTexture; \n";
 		try
 		{
 			// open files
-			vShaderFile.open(vertexPath);
+			//vShaderFile.open(vertexPath);
 			fShaderFile.open(fragmentPath);
 			std::stringstream vShaderStream, fShaderStream;
 			// read file's buffer contents into streams
-			vShaderStream << vShaderFile.rdbuf();
+			//vShaderStream << vShaderFile.rdbuf();
 			fShaderStream << fShaderFile.rdbuf();
 			// close file handlers
-			vShaderFile.close();
+			//vShaderFile.close();
 			fShaderFile.close();
 			// convert stream into string
-			vertexCode = vShaderStream.str();
+			//vertexCode = vShaderStream.str();
 			fragmentCode += fShaderStream.str();
 		}
 		catch (std::ifstream::failure e)
 		{
 			std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
 		}
+
+		vertexCode = " \n\
+#version 330 core \n\
+layout(location = 0) in vec3 aPos;  \n\
+layout(location = 1) in vec3 aColor;  \n\
+layout(location = 2) in vec2 aTexCoord; \n\
+\n\
+out vec3 ourColor; \n\
+out vec2 TexCoord; \n\
+\n\
+void main() \n\
+{ \n\
+	gl_Position = vec4(aPos, 1.0); \n\
+	ourColor = aColor; \n\
+	TexCoord = aTexCoord; \n\
+} \n\
+";
 		const char* vShaderCode = vertexCode.c_str();
 
 		fragmentCode += "\n\
