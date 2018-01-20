@@ -43,16 +43,22 @@ uniform float time; \n \
 uniform vec3 iResolution; \n\
 uniform float iTime; \n \
 uniform float iTimeDelta; \n \
-uniform float iFrame; \n \
-uniform float iChannelTime[4];  \n \
+//uniform float iFrame; \n \
+//uniform float iChannelTime[4];  \n \
 uniform vec4 iMouse; \n \
-uniform vec4 iDate; \n \
-uniform float iSampleRate; \n \
-uniform vec3 iChannelResolution[4]; \n \
+//uniform vec4 iDate; \n \
+//uniform float iSampleRate; \n \
+//uniform vec3 iChannelResolution[4]; \n \
 out vec4 FragColor; \n \
 in vec3 ourColor; \n \
 in vec2 TexCoord; \n \
-uniform sampler2D ourTexture; \n";
+uniform sampler2D iChannel0; \n \
+uniform sampler2D iChannel1; \n \
+uniform sampler2D iChannel2; \n \
+uniform sampler2D iChannel3; \n \
+uniform sampler2D iChannel4; \n \
+uniform sampler2D iChannel5; \n \
+uniform sampler2D iChannel6; \n ";
 
 		try
 		{

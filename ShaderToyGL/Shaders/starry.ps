@@ -1,3 +1,6 @@
+// https://www.shadertoy.com/view/MdSSzW
+
+
 #define PI 3.14159265
 #define TWO_PI 6.2831853
 //#define USE_PROCEDURAL 
@@ -178,7 +181,7 @@ float noise( in vec3 x )
 	f = fade3(f);
 	
 	vec2 uv = (p.xy+vec2(37.0,17.0)*p.z) + f.xy;
-	vec2 rg = texture( iChannel0, (uv+0.5)/256.0, -100.0 ).yx;
+	vec2 rg = texture( iChannel0, (uv+0.5)/256.0, -100.0 ).yz;
 	return mix( rg.x, rg.y, f.z );
 }
 
@@ -225,7 +228,7 @@ vec3 bluegrad(float d)
 vec2 hash2( vec2 p )
 {
 	// texture based white noise
-	return texture( iChannel0, (p+0.5)/256.0, -100.0 ).xy;
+	return texture( iChannel0, (p+0.5)/256.0, -100.0 ).yz;
 }
 
 vec3 blackbody_grad(float x)
@@ -239,8 +242,8 @@ vec3 blackbody_grad(float x)
 
 vec4 hash4( vec2 p)
 {
-    return vec4(texture( iChannel0, (p+0.5)/256.0, -100.0 ).xy,
-                texture( iChannel0, (p+0.5)/256.0, -260.0 ).xy);
+    return vec4(texture( iChannel0, (p+0.5)/256.0, -100.0 ).yz,
+                texture( iChannel0, (p+0.5)/256.0, -260.0 ).yz);
 }
 
 float star_falloff(float dist, float radius)
