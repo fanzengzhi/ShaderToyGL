@@ -138,9 +138,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PathOperation.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ShaderToyGL.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Images\favicon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
