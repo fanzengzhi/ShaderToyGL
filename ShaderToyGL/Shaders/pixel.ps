@@ -1,9 +1,9 @@
-
+// texture0 = wood.jpg
     
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     vec4 vcol = texture( iChannel0, fragCoord / iResolution.xy);
     
 
-    fragColor = vec4( vcol.zyx, 1.0);
+    fragColor = vec4( vcol.xyz, 1.0);
 }

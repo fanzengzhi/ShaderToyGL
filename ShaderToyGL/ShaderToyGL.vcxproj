@@ -141,6 +141,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="StringUtility.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>

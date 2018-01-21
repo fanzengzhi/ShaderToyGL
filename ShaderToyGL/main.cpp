@@ -8,6 +8,7 @@
 #include "Shader.h"
 #include "PathOperation.h"
 #include "Texture.h"
+#include "StringUtility.h"
 
 using namespace std;
 
@@ -104,19 +105,35 @@ int main()
 
 
 	// load and create a texture 
-	ToyTexture texture1;
-	string imagePath = initPath + "\\Images\\Cloud.png";
-	//string imagePath = initPath + "\\test.jpg";
-	texture1.pixelFormat = GL_RGBA;
-	texture1.mMagFilter = GL_NEAREST;
-	texture1.mMinFiler = GL_NEAREST;
-	texture1.init();
-	texture1.setData(imagePath, true);
-	texture1.setTexIndex(0);
-	
+	auto textureMaps = getTextures(filePath);
+	std::vector<ToyTexture*> toyTextures;
+	for (auto& texItor : textureMaps)
+	{
+		auto texName = texItor.first;
+		int texIndex = texItor.second;
+		
+		ToyTexture* tex = new ToyTexture();
+		string imagePath = initPath + "Images\\" + texName;
+		//string imagePath = initPath + "\\test.jpg";
+
+		if (texName.substr(texName.length() - 3) == "png")
+			tex->pixelFormat = GL_RGBA;
+		else
+			tex->pixelFormat = GL_RGB;
+
+		tex->mMagFilter = GL_LINEAR;
+		tex->mMinFiler = GL_LINEAR;
+		tex->init();
+		tex->setData(imagePath, true);
+		tex->setTexIndex(texIndex);
+
+		toyTextures.push_back(tex);
+	}
+
 	// tell OpenGL for each sampler to which texture unit it belongs to (only has to be done once)
 	ourShader.use();
 	ourShader.setInt("iChannel0", 0); // iChannel0 samples Texture0
+	ourShader.setInt("iChannel1", 1); // iChannel1 samples Texture1
 	
 	// Set Uniforms
 	float resolution[3] = { SCR_WIDTH, SCR_HEIGHT, 0.0f};
@@ -164,6 +181,12 @@ int main()
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	// ------------------------------------------------------------------
 	glfwTerminate();
+
+	for (auto texPtr : toyTextures)
+	{
+		if (texPtr)
+			delete texPtr;
+	}
 	return 0;
 }
 
